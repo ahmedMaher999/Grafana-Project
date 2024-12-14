@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  flask-app:
+    build: .
+    container_name: flask-irs-app
+    ports:
+      - "5000:5000"
+    environment:
+      MYSQL_HOST: mysql-db
+      MYSQL_USER: irs_user
+      MYSQL_PASSWORD: password123
+      MYSQL_DATABASE: irs_data
+    depends_on:
+      - mysql-db
+
+  mysql-db:
+    image: mysql:5.7
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: irs_data
+      MYSQL_USER: irs_user
+      MYSQL_PASSWORD: password123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data: 
