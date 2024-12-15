@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Install the dependencies
-RUN pip install --no-cache-dir flask mysql-connector-python
+RUN pip install --no-cache-dir flask mysql-connector-python faker
 
 # Expose port 5000 to allow access to the Flask app
 EXPOSE 5000

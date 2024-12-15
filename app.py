@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from faker import Faker
 import mysql.connector
 import os
 
@@ -11,6 +12,55 @@ db_config = {
     'password': os.getenv('MYSQL_PASSWORD', 'password123'),
     'database': os.getenv('MYSQL_DATABASE', 'irs_data')
 }
+
+faker = Faker()
+
+# Function to seed data into the database
+def seed_data():
+    try:
+        # Connect to the database
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+
+        # Insert data into taxpayers table
+        for _ in range(500):  # Create 500 taxpayers
+            name = faker.name()
+            age = faker.random_int(min=18, max=80)
+            state = faker.state()
+            cursor.execute("INSERT INTO taxpayers (name, age, state) VALUES (%s, %s, %s)", (name, age, state))
+
+        conn.commit()
+
+        # Retrieve all taxpayers
+        cursor.execute("SELECT id FROM taxpayers")
+        taxpayer_ids = [row[0] for row in cursor.fetchall()]
+
+        # Insert data into returns table
+        for taxpayer_id in taxpayer_ids:
+            for _ in range(2):  # Add 2 returns per taxpayer
+                year = faker.random_int(min=1940, max=2024)
+                tax_paid = round(faker.random_number(digits=4) + faker.random.random(), 2)
+                refund = round(faker.random.uniform(0, tax_paid), 2)
+                filing_type = faker.random_element(elements=["Individual", "Joint"])
+                cursor.execute(
+                    "INSERT INTO returns (taxpayer_id, year, tax_paid, refund, filing_type) VALUES (%s, %s, %s, %s, %s)",
+                    (taxpayer_id, year, tax_paid, refund, filing_type)
+                )
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return "Database seeded successfully!"
+
+    except mysql.connector.Error as err:
+        return f"Error: {err}"
+
+# Route to trigger the seeding process
+@app.route('/seed-database', methods=['GET'])
+def seed_database():
+    message = seed_data()
+    return jsonify({'message': message})
 
 # Routes
 @app.route('/total-revenue', methods=['GET'])
