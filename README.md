@@ -10,7 +10,7 @@ This project visualizes simulated IRS tax data using Flask, MySQL, Docker, and G
 ### Step 1: Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/grafana-project.git
+git clone https://github.com/ahmedMaher999/Grafana-Project.git
 cd grafana-project
 ```
 
