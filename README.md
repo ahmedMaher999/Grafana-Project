@@ -177,11 +177,5 @@ docker exec -it mysql-db mysql -u irs_user -p
 curl http://localhost:5000/total-revenue
 ```
 
----
-
-## 📬 Author
-
-Made with ❤️ by [Your Name]  
-This is part of a DevOps data visualization project using Grafana and Docker.
 
 
