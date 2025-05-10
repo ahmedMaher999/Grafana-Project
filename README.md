@@ -112,7 +112,9 @@ GROUP BY year;
 
 Below is a sample of the Grafana dashboard created using the above queries:
 
-![Grafana Dashboard](images/dashboard.png)
+![XY Chart](./images/xy_chart.png)
+![Refunds Table](./images/refunds_table.png)
+![Filings Trend](./images/trend_chart.png)
 
 ---
 
